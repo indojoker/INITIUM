@@ -1,0 +1,41 @@
+body{
+	background: #000;
+}
+
+img{
+	overflow: hidden;
+	border-radius: 10px;
+}
+iframe{
+	overflow: hidden;
+	border-radius: 10px;
+}
+
+iframe {
+    
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -ms-transition: all 1s ease; /* IE 9 */
+    -o-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+}
+
+iframe:hover {
+    cursor: pointer;
+    height:475px;
+    width: 350px;
+}
+img {
+    
+    -webkit-transition: all 1s ease; /* Safari and Chrome */
+    -moz-transition: all 1s ease; /* Firefox */
+    -ms-transition: all 1s ease; /* IE 9 */
+    -o-transition: all 1s ease; /* Opera */
+    transition: all 1s ease;
+}
+
+img:hover {
+    cursor: pointer;
+    height:475px;
+    width: 350px;
+}

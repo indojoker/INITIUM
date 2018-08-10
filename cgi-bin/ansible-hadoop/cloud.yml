@@ -1,0 +1,57 @@
+- hosts: cloudnode
+  gather_facts: no
+  tasks:
+  - name: to create volume group
+    lvg:
+        vg: "myvg"
+        pvs: "/dev/sdb"
+
+  - name: to create logical volume
+    lvol:
+        vg: "myvg"
+        lv: "mylv"
+        size: 512
+
+  - name: to create file system
+    filesystem:
+        fstype: ext4
+        dev: /dev/myvg/mylv
+
+  - name: mount lvm on the folder
+    mount:
+        src: /dev/myvg/mylv
+        path: /namenode/
+        state: mounted
+        fstype: ext4
+
+  - name: /etc/exports entry
+    blockinfile:
+        path: /etc/exports
+        state: present
+        block: |
+           /namenode/ 192.168.43.167(rw,no_root_squash)
+           /namenode/ 192.168.43.161(rw,no_root_squash)
+
+  - name: restart nfs service
+    service:
+        name: nfs
+        state: restarted
+        enabled: true
+
+- hosts: namenode,bnamenode
+  gather_facts: no
+  tasks:
+
+  - name: restart nfs service
+    service:
+        name: nfs
+        state: restarted
+        enabled: true
+
+  - name: mounting
+    mount:
+        src: 192.168.43.218:/namenode/
+        path: /share
+        state: mounted
+        fstype: nfs
+

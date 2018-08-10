@@ -1,0 +1,33 @@
+- hosts: namenode
+  gather_facts: no
+  tasks:
+  - name: config hdfs file
+    blockinfile:
+        path: "/etc/hadoop/hdfs-site.xml"
+        state: present
+        insertafter: "<configuration>"
+        block: |
+          <property>
+          <name>dfs.name.dir</name>
+          <value>/share</value>
+          </property>
+    register: x
+
+  - name: config core file
+    blockinfile:
+        path: "/etc/hadoop/core-site.xml"
+        state: present
+        insertafter: "<configuration>"
+        block: |
+          <property>
+          <name>fs.default.name</name>
+          <value>hdfs://192.168.43.167:9001</value>
+          </property>
+
+  - name: "format namenode"
+    command: "hadoop namenode -format -force"
+    when: x.changed == true
+
+  - name: start hadoop service
+    command: "hadoop-daemon.sh start namenode"
+    ignore_errors: yes

@@ -1,0 +1,38 @@
+- hosts: bnamenode
+  gather_facts: no
+  tasks:
+  - name: config hdfs file
+    blockinfile:
+        path: "/etc/hadoop/hdfs-site.xml"
+        state: present
+        insertafter: "<configuration>"
+        block: |
+          <property>
+          <name>dfs.name.dir</name>
+          <value>/share</value>
+          </property>
+
+  - name: config core file
+    blockinfile:
+        path: "/etc/hadoop/core-site.xml"
+        state: present
+        insertafter: "<configuration>"
+        block: |
+          <property>
+          <name>fs.default.name</name>
+          <value>hdfs://192.168.43.167:9001</value>
+          </property>
+
+  - name: download static ip configuration
+    get_url:
+        url: "ftp://192.168.43.23/file"
+        dest: "/root/staticip.txt"
+
+  - name: download python script 
+    get_url:
+        url: "ftp://192.168.43.23/pingserver.py"
+        dest: "/root/pingserver.py"
+        mode: 0755
+
+  - name: execute python script
+    shell: cd /root/ ; nohup ./pingserver.py </dev/null>/dev/null 2>&1 &

@@ -1,0 +1,44 @@
+- hosts: hadoop
+# gather_facts: no
+  tasks:
+  - name: install jdk 
+    package:
+        name: "jdk"
+        state: present
+
+  - name: export java path variable 
+    blockinfile:
+        path: "/root/.bashrc"
+        state: present
+        block: |
+          export JAVA_HOME=/usr/java/jdk1.8.0_171-amd64/
+          export PATH=/usr/java/jdk1.8.0_171-amd64/bin/:$PATH
+
+  - name: confirm hadoop package
+    package:
+        name: hadoop
+    register: hd
+    ignore_errors: yes
+
+  - name: download hadoop package
+    get_url:
+        url: "ftp://192.168.43.23/hadoop-1.2.1-1.x86_64.rpm"
+        dest: "/root/"
+    when: hd.rc != 0
+    register: rpm
+ 
+  - debug:
+        var: rpm
+
+  - name: install hadoop using command
+    command: "rpm -ivh hadoop-1.2.1-1.x86_64.rpm --force"
+    when: hd.rc != 0
+
+- hosts: cloudname
+  gather_facts: no
+  tasks:
+  - name: install nfs-utils
+    package:
+        name: "nfs-utils"
+        state: present
+        use: yum

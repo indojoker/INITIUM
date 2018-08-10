@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>CAAS|THANOS</title>
+</head>
+<body>
+<center>
+CAAS by THANOS
+</center>
+<form action='cgi-bin/caas-launch.py'>
+<table align="center" width='80%' border=1>
+<tr>
+<td>Enter Container Name: </td>
+<td><input name='cname' /></td>
+</tr>
+
+
+<tr>
+<td>Enter Image Name:</td>
+<td>
+<select name='imgname'>
+<option>centos:latest</option>
+<option>ubuntu:14.04</option>
+<option>centos:6</option>
+</select>
+
+</td>
+</tr>
+
+<tr>
+<td><input type='submit' /></td>
+<td><input type='reset' /></td>
+</tr>
+
+</table>
+</form>
+
+
+</body>
+</html>

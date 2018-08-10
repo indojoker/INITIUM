@@ -1,0 +1,60 @@
+
+- hosts: 192.168.43.162
+  tasks:
+  - name: create lv
+    lvol:
+        vg: /dev/mycloud
+        lv: pp2
+        size: 1
+
+  - name: Create a ext4 filesystem on lv
+    command: "mkfs.ext4 /dev/mycloud/pp2"
+
+  - name: create cloud folder
+    file:
+        path: /pp2
+        state: directory
+        mode: 0777
+
+  - name: fix folder size by mounting
+    command: mount /dev/mycloud/pp2  /pp2
+
+  - lineinfile:
+        line: "/pp2  192.168.43.213(rw,no_root_squash)"
+        path: /etc/exports
+  - lineinfile:
+        line: "/dev/mycloud/pp2  /pp2  ext4  defaults  0 0"
+        path: /etc/fstab
+
+  - name: install nfs
+    package:
+        name: nfs-utils
+        state: present
+
+  - name: start nfs service
+    service:
+        name: nfs
+        state: restarted
+        enabled: true
+
+- hosts: 192.168.43.213
+  tasks:
+  - name: install nfs
+    package:
+        name: nfs-utils
+        state: present
+
+  - name: create drive folder
+    file:
+        path: /media/pp2
+        state: directory
+        mode: 0777
+
+  - name: mount drive
+    command: "mount 192.168.43.162:/pp2  /media/pp2"
+
+  - name: fstab entry
+    lineinfile:
+        line: "192.168.43.162:/pp2  /media/pp2  nfs  _netdev,defaults  0 0"
+        path: /etc/fstab
+
