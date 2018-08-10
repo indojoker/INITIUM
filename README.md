@@ -1,2 +1,2 @@
 # INITIUM
-INITIUM is a full stack developed project to automate HADOOP cluster and Cloud services.
+INITIUM is a full stack developed project to automate HADOOP cluster and Cloud services.The complete setup was containerized to provide security in deployment of OWN LINUX CLOUD architecture using Dockers in the services of SAAS (Software as a Service), STAAS(Storage as a Service), CAAS(Container as a Service), PAAS(Platform as a Service). With complete setup automated using DevOps automation tool Ansible and scripted using Python3. 
